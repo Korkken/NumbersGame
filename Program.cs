@@ -13,114 +13,132 @@ while (playing)
 
 void MainGame()
 {
+    const int easyMin = 1;
+    const int easyMax = 20;
+    const int mediumMin = 1;
+    const int mediumMax = 30;
+    const int hardMin = 1;
+    const int hardMax = 40;
+    const int veryHardMin = 1;
+    const int veryHardMax = 50;
+    const int extremeMin = 1;
+    const int extremeMax = 60;
     int minValue;
     int maxValue;
 
-    int guessedNumber;
-    int difficulty;
+
+
     lives = 5;
+    Console.WriteLine("Välkommen! Jag tänker på ett nummer. Kan du gissa vilket? Du får fem försök.");
     Console.WriteLine("Vilken svårighetsgrad skulle du vilja köra på? 1-5 (1 är lättast, 5 svårast)");
-    int.TryParse(Console.ReadLine(), out difficulty);
-    switch (difficulty)
+    int difficulty = GetValidIntInput("Skriv ett tal mellan 1-5 för svårighetsgrad:");
+
+    switch (difficulty) //checking which difficulty the player chose.
     {
         case 1:
-            minValue = 1;
-            maxValue = 21;
+            minValue = easyMin;
+            maxValue = easyMax;
             Console.WriteLine($"Du får gissa på ett tal mellan {minValue} och {maxValue}");
             break;
         case 2:
-            minValue = 1;
-            maxValue = 31;
+            minValue = mediumMin;
+            maxValue = mediumMax;
             Console.WriteLine($"Du får gissa på ett tal mellan {minValue} och {maxValue}");
             break;
         case 3:
-            minValue = 1;
-            maxValue = 41;
+            minValue = hardMin;
+            maxValue = hardMax;
             Console.WriteLine($"Du får gissa på ett tal mellan {minValue} och {maxValue}");
             break;
         case 4:
-            minValue = 1;
-            maxValue = 51;
+            minValue = veryHardMin;
+            maxValue = veryHardMax;
             Console.WriteLine($"Du får gissa på ett tal mellan {minValue} och {maxValue}");
             break;
         case 5:
-            minValue = 1;
-            maxValue = 61;
+            minValue = extremeMin;
+            maxValue = extremeMax;
             Console.WriteLine($"Du får gissa på ett tal mellan {minValue} och {maxValue}");
             break;
         default:
-            minValue = 1;
-            maxValue = 21;
+            minValue = easyMin;
+            maxValue = easyMax;
             Console.WriteLine($"Du får gissa på ett tal mellan {minValue} och {maxValue}");
             break;
     }
-    int randomNumber = random.Next(minValue, maxValue);
-    Console.WriteLine("Välkommen! Jag tänker på ett nummer. Kan du gissa vilket? Du får fem försök.");
 
-    while (lives != 0) //Continue the game until the person runs out of guesses/lives
+    int randomNumber = random.Next(minValue, maxValue + 1);
+
+
+    for (int attempts = 1; attempts <= 5; attempts++)
     {
-
-        while (!int.TryParse(Console.ReadLine(), out guessedNumber))
+        int guessedNumber = GetValidIntInput("Gissa ett tal:");
+        if (CheckGuess(guessedNumber, randomNumber))
         {
-            Console.WriteLine("Skriv in en siffra eller ett tal tack");
+            return;
         }
-
-        CheckGuess(guessedNumber, randomNumber);
     }
-
+    Console.WriteLine($"Tyvärr, du lyckades inte gissa talet på fem försök! Talet var {randomNumber}");
+    PlayAgain();
 
 
 
 
 }
-void CheckGuess(int guessedNumber, int randomNumber) //Check guessed number against randomed number to see if the player has guessed correctly
+bool CheckGuess(int guessedNumber, int randomNumber) //Check guessed number against randomed number to see if the player has guessed correctly
 {
-    if (guessedNumber == randomNumber) //Player guessed correctly
+    if (guessedNumber == randomNumber)
     {
-        Console.WriteLine("Wohoo! Du klarade det!");
+        Console.WriteLine("Grattis, du gissade rätt!");
         PlayAgain();
-        lives = 0;
-    }
-    else if (guessedNumber < randomNumber) //Player guessed a number that was lower than the randomed number
+        return true;
+    } //Player guessed correctly
+    else if (guessedNumber < randomNumber)
     {
-        Console.WriteLine("Tyvärr, du gissade för lågt!");
         lives--;
-        if (lives == 0)
-        {
-            Console.WriteLine($"Tyvärr, du lyckades inte gissa talet på fem försök! Talet var {randomNumber}");
-            PlayAgain();
-        }
-    }
-    else if (guessedNumber > randomNumber) //Player guessed a number that was higher than the randomed number
-    {
-        Console.WriteLine("Tyvärr, du gissade för högt!");
-        lives--;
-        if (lives == 0)
-        {
-            Console.WriteLine($"Tyvärr, du lyckades inte gissa talet på fem försök! Talet var {randomNumber}");
-            PlayAgain();
-        }
+        Console.WriteLine("Tyvärr, du gissade för lågt. Du har " + lives + " liv kvar.");
 
+        return false;
+    } //Player guessed too low)
+    else if (guessedNumber > randomNumber)
+    {
+        lives--;
+        Console.WriteLine("Tyvärr, du gissade för högt. Du har " + lives + " liv kvar.");
+
+        return false;
+    } //Player guessed too high)
+    else
+    {
+        lives--;
+        playing = false;
+        return false;
     }
 
 }
-void PlayAgain()  //asks if player wants to play another round.
+void PlayAgain()
 {
     Console.WriteLine("Skulle du vilja testa igen? ja eller nej?");
-    string rematch = Console.ReadLine();
-    if (rematch.ToLower() == "ja")
+    var rematch = Console.ReadLine();
+    if (rematch?.ToLower() == "ja")
     {
-
         Console.WriteLine("Då kör vi igen!");
+        playing = true; // Set playing to true to continue the main game loop
     }
     else
     {
         Console.WriteLine("Jahapp, det var ju tråkigt för dig");
         playing = false;
     }
-
 }
-
+int GetValidIntInput(string prompt)
+{
+    int result;
+    do
+    {
+        Console.WriteLine(prompt);
+    } while (!int.TryParse(Console.ReadLine(), out result));
+    return result;
+}
 
 
 Console.ReadLine();
