@@ -6,7 +6,7 @@ bool playing = true;
 Random random = new Random();
 int lives;
 
-while (playing)
+while (playing) //main game loop
 {
     MainGame();
 }
@@ -69,7 +69,6 @@ void MainGame()
 
     int randomNumber = random.Next(minValue, maxValue + 1);
 
-
     for (int attempts = 1; attempts <= 5; attempts++)
     {
         int guessedNumber = GetValidIntInput("Gissa ett tal:");
@@ -80,9 +79,6 @@ void MainGame()
     }
     Console.WriteLine($"Tyvärr, du lyckades inte gissa talet på fem försök! Talet var {randomNumber}");
     PlayAgain();
-
-
-
 
 }
 bool CheckGuess(int guessedNumber, int randomNumber) //Check guessed number against randomed number to see if the player has guessed correctly
@@ -109,7 +105,6 @@ bool CheckGuess(int guessedNumber, int randomNumber) //Check guessed number agai
     } //Player guessed too high)
     else
     {
-        lives--;
         playing = false;
         return false;
     }
@@ -127,10 +122,10 @@ void PlayAgain()
     else
     {
         Console.WriteLine("Jahapp, det var ju tråkigt för dig");
-        playing = false;
+        playing = false;  // Set playing to false to exit the main game loop
     }
 }
-int GetValidIntInput(string prompt)
+int GetValidIntInput(string prompt) //Method to check if the player input is a valid int
 {
     int result;
     do
