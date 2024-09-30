@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 bool playing = true;
 Random random = new Random();
 int lives;
-
+Console.WriteLine("Välkommen! Jag tänker på ett nummer. Kan du gissa vilket? Du får fem försök.");
 while (playing) //main game loop
 {
     MainGame();
@@ -29,8 +29,8 @@ void MainGame()
 
 
     lives = 5;
-    Console.WriteLine("Välkommen! Jag tänker på ett nummer. Kan du gissa vilket? Du får fem försök.");
-    Console.WriteLine("Vilken svårighetsgrad skulle du vilja köra på? 1-5 (1 är lättast, 5 svårast)");
+    
+    Console.WriteLine("Vilken svårighetsgrad skulle du vilja köra på? 1-5 (1 är lättast, 5 svårast)"); //letting the user choose difficulty
     int difficulty = GetValidIntInput("Skriv ett tal mellan 1-5 för svårighetsgrad:");
 
     switch (difficulty) //checking which difficulty the player chose.
@@ -69,7 +69,7 @@ void MainGame()
 
     int randomNumber = random.Next(minValue, maxValue + 1);
 
-    for (int attempts = 1; attempts <= 5; attempts++)
+    for (int attempts = 1; attempts <= 5; attempts++) //main game loop, checking if the users input is correct or not
     {
         int guessedNumber = GetValidIntInput("Gissa ett tal:");
         if (CheckGuess(guessedNumber, randomNumber))
@@ -81,7 +81,7 @@ void MainGame()
     PlayAgain();
 
 }
-bool CheckGuess(int guessedNumber, int randomNumber) //Check guessed number against randomed number to see if the player has guessed correctly
+bool CheckGuess(int guessedNumber, int randomNumber) //Check guessed number against randomed number to see if the user has guessed correctly
 {
     if (guessedNumber == randomNumber)
     {
@@ -92,14 +92,14 @@ bool CheckGuess(int guessedNumber, int randomNumber) //Check guessed number agai
     else if (guessedNumber < randomNumber)
     {
         lives--;
-        Console.WriteLine("Tyvärr, du gissade för lågt. Du har " + lives + " liv kvar.");
+        Console.WriteLine($"Tyvärr, du gissade för lågt. Du har {lives} liv kvar.");
 
         return false;
     } //Player guessed too low)
     else if (guessedNumber > randomNumber)
     {
         lives--;
-        Console.WriteLine("Tyvärr, du gissade för högt. Du har " + lives + " liv kvar.");
+        Console.WriteLine($"Tyvärr, du gissade för högt. Du har {lives} liv kvar.");
 
         return false;
     } //Player guessed too high)
@@ -110,7 +110,7 @@ bool CheckGuess(int guessedNumber, int randomNumber) //Check guessed number agai
     }
 
 }
-void PlayAgain()
+void PlayAgain() //method to let the user play another round.
 {
     Console.WriteLine("Skulle du vilja testa igen? ja eller nej?");
     var rematch = Console.ReadLine();
